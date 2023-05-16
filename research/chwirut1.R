@@ -7,7 +7,6 @@ Try(fm <- nls(y ~ exp(-b1*x)/(b2+b3*x), data = Chwirut1, trace = TRUE,
 y=predict(fm)
 
 df=data.frame(x=Chwirut1$x, y)
-!duplicated(v)
 df=df[!duplicated(df$x),]
 df=df[order(df$x),]
 

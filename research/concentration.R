@@ -7,4 +7,4 @@ confint2(L.minor.m1)
 confint2(L.minor.m1, "K")
 
 plot(L.minor$conc,L.minor$rate)
-lines(L.minor$conc,predict(L.minor.m1))
+lines(L.minor$conc,predict(L.minor.m1), col="blue")
