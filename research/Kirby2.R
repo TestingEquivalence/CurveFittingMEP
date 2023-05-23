@@ -1,3 +1,5 @@
+library(NISTnls)
+
 Try <- function(expr) if (!inherits(val <- try(expr), "try-error")) val
 
 Try(fm <- nls(y ~ (b1 + b2*x + b3*x**2) / (1 + b4*x + b5*x**2),

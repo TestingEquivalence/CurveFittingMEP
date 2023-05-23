@@ -1,3 +1,4 @@
+library(NISTnls)
 Try <- function(expr) if (!inherits(val <- try(expr), "try-error")) val
 plot(y ~ x, data = Roszman1)
 Try(fm <- nls(y ~ b1 - b2*x - atan(b3/(x-b4))/pi, data = Roszman1,

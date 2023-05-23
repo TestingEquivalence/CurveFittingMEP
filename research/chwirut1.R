@@ -10,5 +10,4 @@ df=data.frame(x=Chwirut1$x, y)
 df=df[!duplicated(df$x),]
 df=df[order(df$x),]
 
-plot(y ~ x, data = Chwirut1)
-lines(df$x,df$y, col="blue")
+plotfit(fm)
