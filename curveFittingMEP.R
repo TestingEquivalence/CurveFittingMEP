@@ -1,5 +1,4 @@
-#source("asymptoticTestBootstrapVariance.R")
-#source("BootstrapTestTPercentile.R")
+source("distance.R")
 library(minpack.lm)
 
 none=""
