@@ -15,6 +15,19 @@ df$y=L.minor$rate
 df=as.data.frame(df)
 df$f=fitted(L.minor.m1)
 
-ab=c(0,max(df$x))
 
-dst_an=distance(df)
+
+
+#df=df[1:3,]
+ab=c(0,205)
+dst_an=distance(df,ab)
+
+
+df=df[order(df$x),]
+df$cy=cumsum(df$y)
+df$cf=cumsum(df$f)
+df$dcf=(df$cy-df$cf)^2
+
+ff=stepfun(df$x,c(0,df$dcf))
+dst_num=integrate(ff,ab[1],ab[2])$value
+
