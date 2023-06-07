@@ -1,5 +1,5 @@
 library(nlstools)
-View(L.minor)
+#View(L.minor)
 source("distance.R")
 
 # conc is random
@@ -15,13 +15,9 @@ df$y=L.minor$rate
 df=as.data.frame(df)
 df$f=fitted(L.minor.m1)
 
-
-
-
 #df=df[1:3,]
 ab=c(0,205)
 dst_an=distance(df,ab)
-
 
 df=df[order(df$x),]
 df$cy=cumsum(df$y)
@@ -31,3 +27,10 @@ df$dcf=(df$cy-df$cf)^2
 ff=stepfun(df$x,c(0,df$dcf))
 dst_num=integrate(ff,ab[1],ab[2])$value
 
+# look at residuals
+
+residuals(L.minor.m1)
+df$res=df$y-df$f
+
+plot(df$x,df$res)
+hist(df$res)

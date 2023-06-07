@@ -5,20 +5,28 @@ none=""
 asymptoticBV="asymptoticBootstrapVariance"
 tPercentileBootstrap="tPercentileBootstrap"
 
-curveFittingMEP<-function(formula,data, test, alpha=0.05,
-                        nSimulation=200){
+MDE="MDE"
+LSE="LSE"
+
+curveFittingMEP<-function(formula,data, test, ab, startValue,alpha=0.05,
+                          nSimulation=200, method=LSE){
   
   #initial information
   ls=list()
+  data=data[order(data$x),]
+  
   ls$data=data
   ls$formula=as.formula(formula)
   ls$frm=formula
   ls$alpha=alpha
   ls$test=test
   ls$nSimulation=nSimulation
+  ls$start=startValue
+  ls$method=method
  
-  # #logit regression for initial values
-  # lr <- glm(mdr$formula,mdr$data, family = quasibinomial("logit"), weights =mdr$weights)
+  # nls regression
+  nls.model <- nls(rate ~ Vm*conc/(K+conc), data = L.minor, start = list(K=20, Vm=120))
+  
   # 
   # # dummy model for technical reasons
   # md= lm(mdr$frm, mdr$data)
