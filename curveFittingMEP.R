@@ -70,7 +70,7 @@ updateModelMDE<-function(m){
   df$y=m$data$y
   df$f=predict(m$model)
   df=as.data.frame(df)
-  m$distance=distance(df,m$ab)
+  m$distance=distance(df,m$ab)$dst
   
   return(m)
 }

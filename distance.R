@@ -23,6 +23,6 @@ distance<-function(df,ab){
   ls$v=v
   ls$dst=dst
   
-  return(dst)
+  return(ls)
 }
 
