@@ -8,7 +8,7 @@ tPercentileBootstrap="tPercentileBootstrap"
 MDE="MDE"
 LSE="LSE"
 
-curveFittingMEP<-function(formula,data, test, ab, startValue,alpha=0.05,
+curveFittingMEP<-function(frm,data, test, ab, start,alpha=0.05,
                           nSimulation=200, method=LSE){
   
   #initial information
@@ -16,77 +16,71 @@ curveFittingMEP<-function(formula,data, test, ab, startValue,alpha=0.05,
   data=data[order(data$x),]
   
   ls$data=data
-  ls$formula=as.formula(formula)
-  ls$frm=formula
+  ls$frm=frm
   ls$alpha=alpha
   ls$test=test
   ls$nSimulation=nSimulation
-  ls$start=startValue
+  ls$start=start
   ls$method=method
- 
-  # nls regression
-  nls.model <- nls(rate ~ Vm*conc/(K+conc), data = L.minor, start = list(K=20, Vm=120))
+  ls$ab=ab
   
-  # 
-  # # dummy model for technical reasons
-  # md= lm(mdr$frm, mdr$data)
-  # y=all.vars(as.formula(mdr$frm))[1]
-  # 
-  # 
-  # # logistic model for given parameters
-  # w=mdr$weights/mdr$n
-  # distance<-function(coef){
-  #   md$coefficients=coef
-  #   l=predict.lm(md,mdr$data)
-  #   (logistic(l)-mdr$data[[y]])*w
-  # }
-  # 
-  # # calculate minimum distance estimator
-  # 
-  # res=nls.lm(par=lr$coefficients, fn=distance)
-  # mdr$result.nls.lm=res
-  # 
-  # # calculate min distance
-  # mdr$min.distance=sqrt(deviance(res))
-  # mdr$coefficients=coef(res)
-  # 
-  # # calculate fitted
-  # md$coefficients=coef(res)
-  # l=predict.lm(md,mdr$data)
-  # mdr$fitted=logistic(l)
-  #  
-  # # easy access to other data 
-  # mdr$y=mdr$data[[y]]
-  # mdr$w=mdr$weights/mdr$n
-  # 
-  # # test results
-  # mdr$min.epsilon=NA
-  # 
-  # if (asymptotic==test) {
-  #   mdr$min.epsilon=asymptoticTest(mdr=mdr)
-  # }
-  # 
-  # if (asymptoticBootstrapVariance==test){
-  #   mdr$min.epsilon=asymptoticTestBootstrapVariance(mdr,nSimulation)
-  # }
-  # 
-  # if (empiricalBootstrap==test){
-  #   mdr$min.epsilon=empiricalBootstrapTest(mdr,nSimulation)
-  # }
-  # 
-  # if (tPercentileBootstrap==test){
-  #   mdr$min.epsilon=tPercentileBootstrapTest(mdr,nSimulation)
-  # }
-  # 
-  # return(ls)
+  ls=updateModel(ls)
+  
+  #update model
+ 
+  
+  return(ls)
 }
 
-# updateMinDistanceModel<-function(p,weights,mdr){
-#   df=mdr$data
-#   y=all.vars(as.formula(mdr$frm))[1]
-#   df[[y]]=p
-#   
-#   nlr=min_dst_logit(mdr$frm,data=df,weights=weights,test = mdr$test, alpha = mdr$alpha,
-#                     nSimulation = mdr$nSimulation)
-#   return(nlr)
-# }
+updateModel<-function(m){
+  if (m$method==LSE){
+    m=updateModelLSE(m)
+  }
+  if (m$method==MDE){
+    
+  }
+  
+  return(m)
+}
+
+updateModelLSE<-function(m){
+  
+  #LSE regression
+  m$model <-  nls(m$frm,m$data, m$start)
+
+  df=list()
+  df$x=m$data$x
+  df$y=m$data$y
+  df$f=predict(m$model)
+  df=as.data.frame(df)
+  m$distance=distance(df,m$ab)
+  
+  return(m)
+}
+
+updateModelMDE<-function(m){
+  model.nls=nls(m$formula,m$data, m$start)
+  
+  fn<-function(coef){
+    
+  }
+  
+  df=list()
+  df$x=m$data$x
+  df$y=m$data$y
+  df$f=predict(m$model)
+  df=as.data.frame(df)
+  m$distance=distance(df,m$ab)
+  
+  return(m)
+}
+
+fn<-function(x){
+  names(x)=names(cf)
+  for (key in names(cf)){
+    data[[key]]=x[[key]]
+  }
+  data$f=with(data,eval(tfrm))
+  dst=distance(data,ab)
+  return(dst)
+}
