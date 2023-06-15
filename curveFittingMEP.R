@@ -53,17 +53,14 @@ updateModelLSE<-function(m){
   df$y=m$data$y
   df$f=predict(m$model)
   df=as.data.frame(df)
-  m$distance=distance(df,m$ab)
+  m$distance=distance(df,m$ab)$dst
   
   return(m)
 }
 
 updateModelMDE<-function(m){
   model.nls=nls(m$formula,m$data, m$start)
-  
-  fn<-function(coef){
-    
-  }
+
   
   df=list()
   df$x=m$data$x
@@ -76,11 +73,10 @@ updateModelMDE<-function(m){
 }
 
 fn<-function(x){
-  names(x)=names(cf)
-  for (key in names(cf)){
+  for (key in names(x)){
     data[[key]]=x[[key]]
   }
-  data$f=with(data,eval(tfrm))
+  data$f=with(data,eval(rhs.frm))
   dst=distance(data,ab)
-  return(dst)
+  return(dst$v)
 }

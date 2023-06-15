@@ -16,7 +16,7 @@ start= list(K=20, Vm=120)
 ab=c(0,205)
 model=curveFittingMEP(frm,data,none, ab, start)
 
-tfrm=rhs(model$frm)
+rhs.frm=rhs(model$frm)
 
 cf=coef(model$model)
 
@@ -32,4 +32,6 @@ with(data,eval(exp))
 with(data,eval(tfrm))
 
 res=nls.lm(par=cf, fn=fn)
-
+v=fn(res$par)
+sum(v*v)
+res$deviance
