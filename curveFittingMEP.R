@@ -11,7 +11,7 @@ MDE="MDE"
 LSE="LSE"
 
 curveFittingMEP<-function(frm,data, test, ab, start,alpha=0.05,
-                          nSimulation=200, method=LSE){
+                          nSimulation=200, method){
   
   #initial information
   ls=list()
