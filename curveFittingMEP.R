@@ -55,6 +55,7 @@ updateModelLSE<-function(m){
   df$y=m$data$y
   df$f=predict(m$model)
   df=as.data.frame(df)
+  m$prediction=df$f
   m$distance=distance(df,m$ab)$dst
   m$coef=coef(m$model)
   
