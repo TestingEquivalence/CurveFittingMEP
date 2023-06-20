@@ -1,4 +1,4 @@
-library(nlstools)
+library(nlsMicrobio)
 #View(L.minor)
 source("distance.R")
 

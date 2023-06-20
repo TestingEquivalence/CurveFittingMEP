@@ -1,6 +1,5 @@
 source("distance.R")
 library(minpack.lm)
-library(nlstools)
 library(formula.tools)
 
 none=""
@@ -84,6 +83,11 @@ updateModelMDE<-function(m){
   m$model=res
   m$distance=res$deviance
   m$coef=res$par
+  for (key in names(res$par)){
+    data[[key]]=res$par[[key]]
+  }
+  
+  m$prediction=with(data,eval(rhs.frm))
   
   return(m)
 }

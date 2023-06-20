@@ -1,4 +1,4 @@
-library(nlstools)
+library(nlsMicrobio)
 source("distance.R")
 source("curveFittingMEP.R")
 source("asymptoticTestBootstrapVariance.R")
