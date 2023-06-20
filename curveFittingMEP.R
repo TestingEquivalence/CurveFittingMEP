@@ -1,4 +1,5 @@
 source("distance.R")
+source("asymptoticTestBootstrapVariance.R")
 library(minpack.lm)
 library(formula.tools)
 
@@ -13,24 +14,27 @@ curveFittingMEP<-function(frm,data, test, ab, start,alpha=0.05,
                           nSimulation=200, method){
   
   #initial information
-  ls=list()
+  m=list()
   data=data[order(data$x),]
   
-  ls$data=data
-  ls$frm=frm
-  ls$alpha=alpha
-  ls$test=test
-  ls$nSimulation=nSimulation
-  ls$start=start
-  ls$method=method
-  ls$ab=ab
-  
-  ls=updateModel(ls)
+  m$data=data
+  m$frm=frm
+  m$alpha=alpha
+  m$test=test
+  m$nSimulation=nSimulation
+  m$start=start
+  m$method=method
+  m$ab=ab
   
   #update model
+  m=updateModel(m)
+  
+   if (test==asymptoticBV){
+     m$min.epsilon=asymptoticTestBootstrapVariance(m)
+   }
  
   
-  return(ls)
+  return(m)
 }
 
 updateModel<-function(m){
