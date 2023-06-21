@@ -4,14 +4,18 @@ bootstrapSD<-function(m){
   data=m$data
   #calculate bootstrap volatility
   vol.fun<-function(dat,ind){
-    m$data=dat[ind,]
-    nm=updateModel(m)
-    return(nm$distance)
+    tryCatch({
+      m$data=dat[ind,]
+      nm=updateModel(m)
+      return(nm$distance)
+    }, error = function(e){
+      return(NA)
+    })
   }
   
   res=boot(data,vol.fun,R=m$nSimulation)
  
-  return(sd(res$t))
+  return(sd(res$t, na.rm=TRUE))
 }
 
 asymptoticTestBootstrapVariance<-function(m){

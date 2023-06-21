@@ -12,7 +12,7 @@ tPercentileBootstrapTest<-function(m){
     return((dstBst-dst)/stDevBst)
   }
 
-  res=boot(parameter$x,t.fun,R=parameter$nSimulation)
+  res=boot(m$data,t.fun,R=m$nSimPercentileTBootstrap)
 
   #calculate quantile of bootstrap distribution
   qt=quantile(res$t,m$alpha,type=1)

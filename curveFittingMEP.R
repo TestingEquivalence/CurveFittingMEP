@@ -1,5 +1,6 @@
 source("distance.R")
 source("asymptoticTestBootstrapVariance.R")
+source("BootstrapTestTPercentile.R")
 library(minpack.lm)
 library(formula.tools)
 
@@ -10,8 +11,8 @@ tPercentileBootstrap="tPercentileBootstrap"
 MDE="MDE"
 LSE="LSE"
 
-curveFittingMEP<-function(frm,data, test, ab, start,alpha=0.05,
-                          nSimulation=200, method){
+curveFittingMEP<-function(frm,data, test, ab, start,  method, alpha=0.05,
+                          nSimulation=200, nSimPercentileTBootstrap=0){
   
   #initial information
   m=list()
@@ -25,13 +26,18 @@ curveFittingMEP<-function(frm,data, test, ab, start,alpha=0.05,
   m$start=start
   m$method=method
   m$ab=ab
+  m$nSimPercentileTBootstrap=nSimPercentileTBootstrap
   
   #update model
   m=updateModel(m)
   
-   if (test==asymptoticBV){
+  if (test==asymptoticBV){
      m$min.epsilon=asymptoticTestBootstrapVariance(m)
-   }
+  }
+  
+  if (test==tPercentileBootstrap){
+    m$min.epsilom=tPercentileBootstrapTest(m)
+  }
  
   
   return(m)
@@ -49,9 +55,8 @@ updateModel<-function(m){
 }
 
 updateModelLSE<-function(m){
-  
   #LSE regression
-  m$model <-  nls(m$frm,m$data, m$start)
+  m$model <-  nls(m$frm,m$data, m$start, nls.control(maxiter = 1000))
 
   df=list()
   df$x=m$data$x
@@ -66,7 +71,8 @@ updateModelLSE<-function(m){
 }
 
 updateModelMDE<-function(m){
-  model.nls=nls(m$frm,m$data, m$start)
+ 
+  model.nls=nls(m$frm,m$data, m$start, nls.control(maxiter = 1000))
   rhs.frm=rhs(m$frm)
   cf=coef(model.nls)
   

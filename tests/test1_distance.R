@@ -37,3 +37,4 @@ df$res=df$y-df$f
 
 plot(df$x,df$res)
 hist(df$res)
+
