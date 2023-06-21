@@ -15,7 +15,7 @@ frm=y ~ Vm*x/(K+x)
 start= list(K=20, Vm=120)
 ab=c(0,205)
 
-model=curveFittingMEP(frm,data,none, ab, start, method=LSE, nSimulation = 1000)
+model=curveFittingMEP(frm,data,none, ab, start, method=LSE, nSimulation = 10000)
 model$distance
 bootstrapSD(m=model)
 
