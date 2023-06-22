@@ -15,11 +15,12 @@ start= list(K=20, Vm=120)
 ab=c(0,205)
 
 
-model=curveFittingMEP(frm,data, tPercentileBootstrap, ab, start = start, method=LSE, nSimulation = 50,
+model=curveFittingMEP(frm,data, tPercentileBootstrap, ab, start = start, method=LSE, nSimulation = 200,
                       nSimPercentileTBootstrap=200)
 model$distance
 model$min.epsilon
 
-model2=curveFittingMEP(frm,data,asymptoticBV,ab,start, method=MDE)
+model2=curveFittingMEP(frm,data,tPercentileBootstrap,ab,start, method=MDE, nSimulation = 100,
+                       nSimPercentileTBootstrap = 200)
 model2$distance
 model2$min.epsilon
