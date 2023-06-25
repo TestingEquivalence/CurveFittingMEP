@@ -23,6 +23,15 @@ plot(m$data$x, m$prediction-m$data$y)
 plot(m$data$x, m$prediction, col="blue",type="l")
 points(m$data$x,m$data$y)
 
+set.seed(10071977)
+m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LSE, nSimulation = 1000)
+m$min.epsilon
+
+set.seed(10071977)
+m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = LSE, nSimulation = 200, 
+                  nSimPercentileTBootstrap = 1000)
+m$min.epsilon
+
 # model MDE
 
 m=curveFittingMEP(frm,data,none, ab, start, method = MDE)
@@ -32,3 +41,12 @@ m$coef
 plot(m$data$x, m$prediction-m$data$y)
 plot(m$data$x, m$prediction, col="blue",type="l")
 points(m$data$x,m$data$y)
+
+set.seed(10071977)
+m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = MDE, nSimulation = 1000)
+m$min.epsilon
+
+set.seed(10071977)
+m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = MDE, nSimulation = 200, 
+                  nSimPercentileTBootstrap = 1000)
+m$min.epsilon
