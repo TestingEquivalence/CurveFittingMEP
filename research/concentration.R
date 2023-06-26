@@ -1,6 +1,7 @@
 library(nlsMicrobio)
 source("distance.R")
 source("curveFittingMEP.R")
+source("size.R")
 
 # conc is random
 data=list()
@@ -50,3 +51,9 @@ set.seed(10071977)
 m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = MDE, nSimulation = 200, 
                   nSimPercentileTBootstrap = 1000)
 m$min.epsilon
+
+# bootstrap coefficients
+
+m=curveFittingMEP(frm,data,none, ab, start, method = LSE)
+set.seed(10071977)
+res=bootstrapCoef(m,1000)
