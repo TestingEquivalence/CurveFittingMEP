@@ -57,3 +57,10 @@ m$min.epsilon
 m=curveFittingMEP(frm,data,none, ab, start, method = LSE)
 set.seed(10071977)
 res=bootstrapCoef(m,1000)
+write.csv2(res,"bst_coef_LSE.csv")
+
+m=curveFittingMEP(frm,data,none, ab, start, method = MDE)
+set.seed(10071977)
+res=bootstrapCoef(m,1000)
+write.csv2(res,"bst_coef_MDE.csv")
+
