@@ -33,7 +33,7 @@ m$min.epsilon
 # model MDE
 m=curveFittingMEP(frm,data,none, ab, start, method = MDE)
 m$distance
-write.csv2(m$coef, "coef.csv")
+write.csv(m$coef, "coef.csv")
 
 plot(m$data$x, m$prediction-m$data$y)
 plot(m$data$x, m$prediction, col="blue",type="l")
@@ -44,9 +44,9 @@ points(m$data$x,m$data$y)
 m=curveFittingMEP(frm,data,none, ab, start, method = LSE)
 set.seed(10071977)
 res=bootstrapCoef(m,1000)
-write.csv2(res,"bst_coef_LSE.csv")
+write.csv(res,"bst_coef_LSE.csv")
 
 m=curveFittingMEP(frm,data,none, ab, start, method = MDE)
 set.seed(10071977)
 res=bootstrapCoef(m,1000)
-write.csv2(res,"bst_coef_MDE.csv")
+write.csv(res,"bst_coef_MDE.csv")
