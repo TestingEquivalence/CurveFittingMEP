@@ -8,9 +8,17 @@ bootstrapCoef<-function(m,nSim){
   data=m$data
   
   for (i in c(1:nSim)){
-    ind=sample.int(nrow(data), replace = TRUE)
-    m$data=data[ind,]
-    nm=updateModel(m)
+    repeat{
+      tryCatch({
+        ind=sample.int(nrow(data), replace = TRUE)
+        m$data=data[ind,]
+        nm=updateModel(m)
+        break
+      }, error=function(e){
+        
+      })
+    }
+    
     res[["dst"]]=c(res[["dst"]],nm$distance)
     for (key in names(nm$coef)){
       res[[key]]=c(res[[key]], nm$coef[[key]])
