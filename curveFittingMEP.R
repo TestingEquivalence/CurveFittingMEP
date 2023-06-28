@@ -47,11 +47,11 @@ updateModel<-function(m){
 }
 
 updateTests<-function(m){
-  if (test==asymptoticBV){
+  if (m$test==asymptoticBV){
     m$min.epsilon=asymptoticTestBootstrapVariance(m)
   }
   
-  if (test==tPercentileBootstrap){
+  if (m$test==tPercentileBootstrap){
     m$min.epsilon=tPercentileBootstrapTest(m)
   }
   return(m)

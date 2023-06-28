@@ -31,3 +31,27 @@ bootstrapCoef<-function(m,nSim){
   res=as.data.frame(res)
   return(res)
 }
+
+powerAtModel<-function(m,nSim, xSampler,errSampler){
+  res=rep(0,nSim)
+  dfs=list()
+  rhs.frm=rhs(m$frm)
+  data=m$data
+  
+  #generate new data
+  for (i in c(1:nSim)){
+    data$x=xSampler(m)
+    data$y=with(data,eval(rhs.frm))
+    err=errSampler(m,data)
+    data$y=data$y+err
+    dfs[[i]]=data
+  }
+  
+  for (i in c(1:nSim)){
+    m$data=dfs[[i]]
+    nm=updateModel(m)
+    nm=updateTests(nm)
+    res[i]=nm$min.epsilon
+  }
+  return(res)
+}
