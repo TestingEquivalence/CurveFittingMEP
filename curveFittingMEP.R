@@ -30,16 +30,8 @@ curveFittingMEP<-function(frm,data, test, ab, start,  method, alpha=0.05,
   
   #update model
   m=updateModel(m)
-  
-  if (test==asymptoticBV){
-    m$min.epsilon=asymptoticTestBootstrapVariance(m)
-  }
-  
-  if (test==tPercentileBootstrap){
-    m$min.epsilon=tPercentileBootstrapTest(m)
-  }
- 
-  
+  m=updateTests(m)
+
   return(m)
 }
 
@@ -51,6 +43,17 @@ updateModel<-function(m){
     m=updateModelMDE(m)
   }
   
+  return(m)
+}
+
+updateTests<-function(m){
+  if (test==asymptoticBV){
+    m$min.epsilon=asymptoticTestBootstrapVariance(m)
+  }
+  
+  if (test==tPercentileBootstrap){
+    m$min.epsilon=tPercentileBootstrapTest(m)
+  }
   return(m)
 }
 
