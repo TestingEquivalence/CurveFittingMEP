@@ -55,3 +55,52 @@ powerAtModel<-function(m,nSim, xSampler,errSampler){
   }
   return(res)
 }
+
+xSamplerUniform<-function(m){
+  s=runif(nrow(m$data),m$ab[1],m$ab[2])
+  return(s)
+}
+
+xSamplerBootstrap<-function(m){
+  size=nrow(m$data)
+  s=sample(m$data$x,size, replace=TRUE)
+  return(s)
+}
+
+xSamplerSmoothBootstrap<-function(m){
+  f<-function(u){
+    as.numeric(quantile(m$data$x, type = 4, probs = u))
+  }
+  size=nrow(m$data)
+  s=runif(size)
+  s=sapply(s, f)
+  return(s)
+}
+
+xSamplerFix<-function(m){
+  return(m$data$x)
+}
+
+errSamplerBootstrap<-function(m){
+  err=m$data$y-m$prediction
+  size=nrow(m$data)
+  s=sample(err,size, replace=TRUE)
+  return(s)
+}
+
+errSamplerNormal<-function(m){
+  err=m$data$y-m$prediction
+  sigma=sd(err)
+  n=nrow(m$data)
+  s=rnorm(n,mean=0,sd=sigma)
+  return(s)
+}
+
+errSamplerWildBootstrap<-function(m){
+  n=nrow(m$data)
+  err=m$data$y-m$prediction
+  s=rbinom(n, size = 1, prob = 0.5)
+  s[s==0]= -1
+  s=err*s
+  return(s)
+}
