@@ -15,13 +15,13 @@ frm=y ~ Vm*x/(K+x)
 start= list(K=20, Vm=120)
 ab=c(0,205)
 
-m=curveFittingMEP(frm,data,none, ab, start, method=LSE)
+m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method=LSE, nSimulation = 200)
 
-s=errSamplerBootstrap(m)
-s
+# xSamplerFix and errSamplerWildBootstrap work together only
+res=powerAtModel(m,nSim=10, xSamplerFix, errSamplerWildBootstrap)
+res
 
-s=errSamplerNormal(m)
-s
+# combine xSamplerUniform with errSamplerBootstrap and errSamplerNormal
 
-s=errSamplerWildBootstrap(m)
-s
+res=powerAtModel(m,nSim=10, xSamplerUniform, errSamplerBootstrap)
+res

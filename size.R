@@ -38,11 +38,15 @@ powerAtModel<-function(m,nSim, xSampler,errSampler){
   rhs.frm=rhs(m$frm)
   data=m$data
   
+  for (key in names(m$coef)){
+    data[[key]]=m$coef[[key]]
+  }
+  
   #generate new data
   for (i in c(1:nSim)){
     data$x=xSampler(m)
     data$y=with(data,eval(rhs.frm))
-    err=errSampler(m,data)
+    err=errSampler(m)
     data$y=data$y+err
     dfs[[i]]=data
   }
