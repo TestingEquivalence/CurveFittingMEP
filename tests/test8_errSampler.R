@@ -17,11 +17,14 @@ ab=c(0,205)
 
 m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method=LSE, nSimulation = 200)
 
-# xSamplerFix and errSamplerWildBootstrap work together only
-res=powerAtModel(m,nSim=10, xSamplerFix, errSamplerWildBootstrap)
-res
+s=errSamplerBootstrap(m)
+s
 
-# combine xSamplerUniform with errSamplerBootstrap and errSamplerNormal
+s=errSamplerNormal(m)
+s
 
-res=powerAtModel(m,nSim=10, xSamplerUniform, errSamplerBootstrap)
-res
+s=errSamplerWildBootstrap(m)
+s
+
+s=errSamplerSmoothBootstrap(m)
+s

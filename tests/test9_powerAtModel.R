@@ -17,11 +17,41 @@ ab=c(0,205)
 
 m=curveFittingMEP(frm,data,none, ab, start, method=LSE)
 
-s=errSamplerBootstrap(m)
-s
 
-s=errSamplerNormal(m)
-s
 
-s=errSamplerWildBootstrap(m)
-s
+# xSamplerFix and errSamplerWildBootstrap work together only
+res=powerAtModel(m,nSim=10, xSamplerFix, errSamplerWildBootstrap)
+res
+
+# combine xSamplerUniform with errSamplerBootstrap, errSamplerSmoothBootstrap and errSamplerNormal
+
+res=powerAtModel(m,nSim=10, xSamplerUniform, errSamplerBootstrap)
+res
+
+res=powerAtModel(m,nSim=10, xSamplerUniform, errSamplerSmoothBootstrap)
+res
+
+res=powerAtModel(m,nSim=10, xSamplerUniform, errSamplerNormal)
+res
+
+# combine xSamplerBootstrap with errSamplerBootstrap, errSamplerSmoothBootstrap and errSamplerNormal
+
+res=powerAtModel(m,nSim=10, xSamplerBootstrap, errSamplerBootstrap)
+res
+
+res=powerAtModel(m,nSim=10, xSamplerBootstrap, errSamplerSmoothBootstrap)
+res
+
+res=powerAtModel(m,nSim=10, xSamplerBootstrap, errSamplerNormal)
+res
+
+# combine xSamplerBootstrap with errSamplerBootstrap, errSamplerSmoothBootstrap and errSamplerNormal
+
+res=powerAtModel(m,nSim=10, xSamplerSmoothBootstrap, errSamplerBootstrap)
+res
+
+res=powerAtModel(m,nSim=10, xSamplerSmoothBootstrap, errSamplerSmoothBootstrap)
+res
+
+res=powerAtModel(m,nSim=10, xSamplerSmoothBootstrap, errSamplerNormal)
+res
