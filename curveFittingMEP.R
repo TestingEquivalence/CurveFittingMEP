@@ -105,3 +105,13 @@ updateModelMDE<-function(m){
   return(m)
 }
 
+predict.m<-function(m, x){
+  data=data.frame(x)
+  for (key in names(m$coef)){
+    data[[key]]=m$coef[[key]]
+  }
+  
+  rhs.frm=rhs(m$frm)
+  y=with(data,eval(rhs.frm))
+  return(y)
+}

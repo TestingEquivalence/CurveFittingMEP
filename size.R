@@ -43,6 +43,7 @@ powerAtModel<-function(m,nSim, xSampler,errSampler){
   }
   
   #generate new data
+  set.seed(10071977)
   for (i in c(1:nSim)){
     data$x=xSampler(m)
     data$y=with(data,eval(rhs.frm))
@@ -56,6 +57,7 @@ powerAtModel<-function(m,nSim, xSampler,errSampler){
     nm=updateModel(m)
     nm=updateTests(nm)
     res[i]=nm$min.epsilon
+    print(i)
   }
   return(res)
 }

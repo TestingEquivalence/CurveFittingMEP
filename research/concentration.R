@@ -15,8 +15,8 @@ start= list(K=20, Vm=120)
 ab=c(0,205)
 
 # model LSE
-
-m=curveFittingMEP(frm,data,none, ab, start, method = LSE)
+mod=LSE
+m=curveFittingMEP(frm,data,none, ab, start, method = mod)
 m$distance
 m$coef
 
@@ -25,32 +25,14 @@ plot(m$data$x, m$prediction, col="blue",type="l")
 points(m$data$x,m$data$y)
 
 set.seed(10071977)
-m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LSE, nSimulation = 1000)
+m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = mod, nSimulation = 1000)
 m$min.epsilon
 
 set.seed(10071977)
-m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = LSE, nSimulation = 200, 
+m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = mod, nSimulation = 200, 
                   nSimPercentileTBootstrap = 1000)
 m$min.epsilon
 
-# model MDE
-
-m=curveFittingMEP(frm,data,none, ab, start, method = MDE)
-m$distance
-m$coef
-
-plot(m$data$x, m$prediction-m$data$y)
-plot(m$data$x, m$prediction, col="blue",type="l")
-points(m$data$x,m$data$y)
-
-set.seed(10071977)
-m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = MDE, nSimulation = 1000)
-m$min.epsilon
-
-set.seed(10071977)
-m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = MDE, nSimulation = 200, 
-                  nSimPercentileTBootstrap = 1000)
-m$min.epsilon
 
 # bootstrap coefficients
 
@@ -63,4 +45,10 @@ m=curveFittingMEP(frm,data,none, ab, start, method = MDE)
 set.seed(10071977)
 res=bootstrapCoef(m,1000)
 write.csv2(res,"bst_coef_MDE.csv")
+
+# simulate power at the model
+
+m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = MDE)
+res=powerAtModel(m,nSim=1000, xSamplerFix,  errSamplerNormal)
+write.csv(res,"power.csv")
 
