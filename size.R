@@ -44,7 +44,7 @@ powerAtModel<-function(m,nSim, xSampler,errSampler){
   
   #generate new data
   set.seed(10071977)
-  for (i in c(1:nSim)){
+  for (i in c(1:(nSim+100))){
     data$x=xSampler(m)
     data$y=with(data,eval(rhs.frm))
     err=errSampler(m)
@@ -52,12 +52,22 @@ powerAtModel<-function(m,nSim, xSampler,errSampler){
     dfs[[i]]=data
   }
   
-  for (i in c(1:nSim)){
-    m$data=dfs[[i]]
-    nm=updateModel(m)
-    nm=updateTests(nm)
-    res[i]=nm$min.epsilon
-    print(i)
+  j=1
+  i=1
+  while(i<=nSim){
+    tryCatch({
+      m$data=dfs[[j]]
+      nm=updateModel(m)
+      nm=updateTests(nm)
+      res[i]=nm$min.epsilon
+      print(i)
+      i=i+1
+      j=j+1
+    }, error = function(e){
+      j<<-j+1
+      print("error")
+      print(j)
+    })
   }
   return(res)
 }
