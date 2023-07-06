@@ -49,6 +49,6 @@ write.csv2(res,"bst_coef_MDE.csv")
 # simulate power at the model
 
 m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = MDE)
-res=powerAtModel(m,nSim=1000, xSamplerBootstrap,  errSamplerSmoothBootstrap)
+res=powerAtModel(m,nSim=1000, xSamplerSmoothBootstrap, errSamplerNormal)
 write.csv(res,"power.csv")
  

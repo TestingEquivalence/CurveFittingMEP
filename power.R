@@ -13,3 +13,14 @@ numericDistance<-function(m,f,dx){
   res=sum(dy)*dx
   return(res)
 }
+
+randomPiecewiseLinear<-function(m, xSampler, errSampler,n){
+  x=xSampler(m,n-2)
+  x=c(x,m$ab)
+  
+  y=errSampler(m,x)
+  f=approxfun(x,y)
+  
+  return(f)
+}
+

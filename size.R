@@ -45,7 +45,8 @@ powerAtModel<-function(m,nSim, xSampler,errSampler){
   #generate new data
   set.seed(10071977)
   for (i in c(1:(nSim+100))){
-    data$x=xSampler(m)
+    n=nrow(data)
+    data$x=xSampler(m, n)
     data$y=with(data,eval(rhs.frm))
     err=errSampler(m)
     data$y=data$y+err
@@ -72,31 +73,28 @@ powerAtModel<-function(m,nSim, xSampler,errSampler){
   return(res)
 }
 
-xSamplerUniform<-function(m){
-  s=runif(nrow(m$data),m$ab[1],m$ab[2])
+xSamplerUniform<-function(m,n){
+  s=runif(n,m$ab[1],m$ab[2])
   return(s)
 }
 
-xSamplerBootstrap<-function(m){
-  size=nrow(m$data)
-  s=sample(m$data$x,size, replace=TRUE)
+xSamplerBootstrap<-function(m,n){
+  s=sample(m$data$x,size=n, replace=TRUE)
   return(s)
 }
 
-xSamplerSmoothBootstrap<-function(m){
+xSamplerSmoothBootstrap<-function(m,n){
   f<-function(u){
     as.numeric(quantile(m$data$x, type = 4, probs = u))
   }
-  size=nrow(m$data)
-  s=runif(size)
+  s=runif(n)
   s=sapply(s, f)
   return(s)
 }
 
-errSamplerBootstrap<-function(m){
+errSamplerBootstrap<-function(m,n){
   err=m$data$y-m$prediction
-  size=nrow(m$data)
-  s=sample(err,size, replace=TRUE)
+  s=sample(err,size = n, replace=TRUE)
   return(s)
 }
 
