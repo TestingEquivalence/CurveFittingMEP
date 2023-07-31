@@ -21,20 +21,4 @@ dst_an=distance(df,ab)
 dst_an$dst
 sum(dst_an$v^2)
 
-df=df[order(df$x),]
-df$cy=cumsum(df$y)
-df$cf=cumsum(df$f)
-df$dcf=(df$cy-df$cf)^2
-
-ff=stepfun(df$x,c(0,df$dcf))
-dst_num=integrate(ff,ab[1],ab[2])$value
-dst_num
-
-# look at residuals
-
-residuals(L.minor.m1)
-df$res=df$y-df$f
-
-plot(df$x,df$res)
-hist(df$res)
 

@@ -18,16 +18,14 @@ ab=c(0,205)
 
 m=curveFittingMEP(frm,data,none, ab, start, method=LSE)
 
-
-
-f<-function(x){
-  predict.m(m,x)+0.1
-}
-
-
 f<-function(x){
   omega=1
-  sin(2*pi*omega*(x-ab[1])/(ab[2]-ab[1]))
+  res=sin(2*pi*omega*(x-ab[1])/(ab[2]-ab[1]))
+  return(res)
 }
 
-numericDistance(m,f,0.001)
+x=seq(from=0, to=205, by=1)
+
+w=0.1
+y=linearPoint(m,f,w,x)
+plot(x,y)

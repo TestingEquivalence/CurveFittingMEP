@@ -1,17 +1,10 @@
 numericDistance<-function(m,f,dx){
-  x=seq(from=m$ab[1], to=m$ab[2], by=dx)
-  y1=predict.m(m,x)
-  y2=f(x)
-  
-  y1=cumsum(y1)
-  y2=cumsum(y2)
-  
-  dy=y1-y2
-  dy=dy*dx
-  dy=dy*dy
-  
-  res=sum(dy)*dx
-  return(res)
+  x=seq(from=m$ab[1],to=m$ab[2],by=dx)
+  y=f(x)
+  df=data.frame(x=x,y=y)
+  m$data=df
+  m=updateModel(m)
+  return(m$distance)
 }
 
 randomPiecewiseLinear<-function(m, xSampler, errSampler,n){
@@ -24,3 +17,24 @@ randomPiecewiseLinear<-function(m, xSampler, errSampler,n){
   return(f)
 }
 
+linearPoint<-function(m,f,w,x){
+  my=predict.m(m,x)
+  fy=f(x)
+  y=w*my+(1-w)*fy
+  return(y)
+}
+
+linearBoundaryPoint<-function(m,f,dx,eps){
+  
+  aim<-function(w){
+    #print(a)
+    lc=a*interiorPoint+(1-a)*exteriorPoint
+    nmdr=updateMinDistanceModel(lc,mdr)
+    return(nmdr$min.distance-eps)
+  }
+  
+  a=uniroot(aim, c(0,1))$root
+  lc=a*interiorPoint+(1-a)*exteriorPoint
+  nmdr=updateMinDistanceModel(lc,mdr)
+  return(lc)
+}

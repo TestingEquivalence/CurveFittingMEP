@@ -15,7 +15,7 @@ start= list(K=20, Vm=120)
 ab=c(0,205)
 
 # model LSE
-mod=LSE
+mod=MDE
 m=curveFittingMEP(frm,data,none, ab, start, method = mod)
 m$distance
 m$coef
