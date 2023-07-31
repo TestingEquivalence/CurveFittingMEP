@@ -18,4 +18,9 @@ ab=c(0,205)
 
 m=curveFittingMEP(frm,data,none, ab, start, method=LSE)
 
-f=randomPiecewiseLinear(m, xSamplerUniform(,)
+f=randomPiecewiseLinear(m, xSamplerFix, errSamplerBootstrap, n=nrow(data)+2)
+
+x=seq(from=0, to=205, by=1)
+y=sapply(x,f)
+y=cumsum(y)
+plot(x,y)

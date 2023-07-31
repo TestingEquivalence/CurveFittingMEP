@@ -18,7 +18,7 @@ randomPiecewiseLinear<-function(m, xSampler, errSampler,n){
   x=xSampler(m,n-2)
   x=c(x,m$ab)
   
-  y=errSampler(m,x)
+  y=errSampler(m,n)
   f=approxfun(x,y)
   
   return(f)

@@ -98,36 +98,34 @@ errSamplerBootstrap<-function(m,n){
   return(s)
 }
 
-errSamplerSmoothBootstrap<-function(m){
+errSamplerSmoothBootstrap<-function(m,n){
   err=m$data$y-m$prediction
   f<-function(u){
     as.numeric(quantile(err, type = 4, probs = u))
   }
-  size=nrow(m$data)
-  s=runif(size)
+  s=runif(n)
   s=sapply(s, f)
   return(s)
 }
 
-errSamplerNormal<-function(m){
+errSamplerNormal<-function(m,n){
   err=m$data$y-m$prediction
   sigma=sd(err)
-  n=nrow(m$data)
   s=rnorm(n,mean=0,sd=sigma)
   return(s)
 }
 
 #  xSamplerFix and errSamplerWildBootstrap should be used always together
 
-errSamplerWildBootstrap<-function(m){
-  n=nrow(m$data)
+errSamplerWildBootstrap<-function(m,n){
   err=m$data$y-m$prediction
+  n=length(err)
   s=rbinom(n, size = 1, prob = 0.5)
   s[s==0]= -1
   s=err*s
   return(s)
 }
 
-xSamplerFix<-function(m){
+xSamplerFix<-function(m,n){
   return(m$data$x)
 }
