@@ -11,7 +11,7 @@ tPercentileBootstrap="tPercentileBootstrap"
 MDE="MDE"
 LSE="LSE"
 
-curveFittingMEP<-function(frm,data, test, ab, start,  method, alpha=0.05,
+curveFittingMEP<-function(frm,data, test, ab, start,  method=LSE, alpha=0.05,
                           nSimulation=200, nSimPercentileTBootstrap=0){
   
   #initial information
@@ -94,13 +94,19 @@ updateModelMDE<-function(m){
   res=nls.lm(par=cf, fn=fn)
   
   m$model=res
-  m$distance=res$deviance
-  m$coef=res$par
+  
   for (key in names(res$par)){
     data[[key]]=res$par[[key]]
   }
-  
   m$prediction=with(data,eval(rhs.frm))
+  
+  data$f=m$prediction
+  m$distance=distance(data,m$ab)$dst
+  
+  m$coef=res$par
+  
+  
+ 
   
   return(m)
 }

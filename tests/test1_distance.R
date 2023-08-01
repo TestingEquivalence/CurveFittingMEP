@@ -1,24 +1,20 @@
-library(nlsMicrobio)
-#View(L.minor)
+library(NISTnls)
 source("distance.R")
 
 # conc is random
-L.minor.m1 <- nls(rate ~ Vm*conc/(K+conc), data = L.minor, start = list(K=20, Vm=120))
-confint2(L.minor.m1)
+data=Roszman1
+data=data[order(data$x),]
+frm=y ~ b1 - b2*x - atan(b3/(x-b4))/pi
+start=c(b1 = 0.1, b2 = -0.00001, b3 = 1000, b4 = -100)
+ab=c(-4869,-464)
 
-plot(L.minor$conc,L.minor$rate)
-lines(L.minor$conc,predict(L.minor.m1), col="blue")
+m=nls(frm,data, start, nls.control(maxiter = 1000))
+data$f=predict(m, data$x)
 
-df=list()
-df$x=L.minor$conc
-df$y=L.minor$rate
-df=as.data.frame(df)
-df$f=fitted(L.minor.m1)
+plot(data$x, data$f, col="blue",type="l")
+points(data$x, data$y)
 
-#df=df[1:3,]
-ab=c(0,205)
-dst_an=distance(df,ab)
+dst_an=distance(data,ab)
 dst_an$dst
-sum(dst_an$v^2)
 
 

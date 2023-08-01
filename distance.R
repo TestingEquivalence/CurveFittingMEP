@@ -13,15 +13,15 @@ distance<-function(df,ab){
     else{
       dx=df$x[i+1]-df$x[i]
     }
-    sf=sf+df$f[i]*dx
-    sy=sy+df$y[i]*dx
+    sf=sf+df$f[i]
+    sy=sy+df$y[i]
     dst=dst+((sf-sy)^2)*dx
     v[i]=(sf-sy)*sqrt(dx)
   }
   
   ls=list()
   ls$v=v
-  ls$dst=dst
+  ls$dst=dst/(n*n*(ab[2]-ab[1]))
   
   return(ls)
 }
