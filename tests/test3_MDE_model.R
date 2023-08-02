@@ -2,7 +2,6 @@ library(NISTnls)
 source("distance.R")
 source("curveFittingMEP.R")
 
-# conc is random
 data=Roszman1
 data=data[order(data$x),]
 frm=y ~ b1 - b2*x - atan(b3/(x-b4))/pi

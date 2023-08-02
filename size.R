@@ -35,22 +35,16 @@ bootstrapCoef<-function(m,nSim){
 powerAtModel<-function(m,nSim, xSampler,errSampler){
   res=rep(0,nSim)
   dfs=list()
-  rhs.frm=rhs(m$frm)
-  data=m$data
-  
-  for (key in names(m$coef)){
-    data[[key]]=m$coef[[key]]
-  }
   
   #generate new data
   set.seed(10071977)
   for (i in c(1:(nSim+100))){
-    n=nrow(data)
-    data$x=xSampler(m, n)
-    data$y=with(data,eval(rhs.frm))
-    err=errSampler(m)
-    data$y=data$y+err
-    dfs[[i]]=data
+    n=nrow(m$data)
+    x=xSampler(m, n)
+    y= predict.m(m,x)
+    err=errSampler(m, n)
+    y=y+err
+    dfs[[i]]=data.frame(x=x, y=y )
   }
   
   j=1

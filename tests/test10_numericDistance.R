@@ -1,27 +1,22 @@
-library(nlsMicrobio)
+library(NISTnls)
 source("distance.R")
 source("curveFittingMEP.R")
 source("size.R")
 source("power.R")
 
-# conc is random
-data=list()
-data$x=L.minor$conc
-data$y=L.minor$rate
-data=as.data.frame(data)
+
+data=Roszman1
 data=data[order(data$x),]
-
-
-frm=y ~ Vm*x/(K+x)
-start= list(K=20, Vm=120)
-ab=c(0,205)
+frm=y ~ b1 - b2*x - atan(b3/(x-b4))/pi
+start=c(b1 = 0.1, b2 = -0.00001, b3 = 1000, b4 = -100)
+ab=c(-4869,-464)
 
 m=curveFittingMEP(frm,data,none, ab, start, method=LSE)
 
 
 
 f<-function(x){
-  predict.m(m,x)+0.1
+  predict.m(m,x)+0.0001*rnorm(length(x))
 }
 
 
@@ -30,4 +25,4 @@ f<-function(x){
   sin(2*pi*omega*(x-ab[1])/(ab[2]-ab[1]))
 }
 
-numericDistance(m,f,0.001)
+numericDistance(m,f,10)

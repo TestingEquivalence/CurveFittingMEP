@@ -1,21 +1,15 @@
-library(nlsMicrobio)
+library(NISTnls)
 source("distance.R")
 source("curveFittingMEP.R")
 source("asymptoticTestBootstrapVariance.R")
 
-# conc is random
-data=list()
-data$x=L.minor$conc
-data$y=L.minor$rate
-data=as.data.frame(data)
+data=Roszman1
 data=data[order(data$x),]
+frm=y ~ b1 - b2*x - atan(b3/(x-b4))/pi
+start=c(b1 = 0.1, b2 = -0.00001, b3 = 1000, b4 = -100)
+ab=c(-4869,-464)
 
-
-frm=y ~ Vm*x/(K+x)
-start= list(K=20, Vm=120)
-ab=c(0,205)
-
-model=curveFittingMEP(frm,data,none, ab, start, method=LSE, nSimulation = 10000)
+model=curveFittingMEP(frm,data,none, ab, start, method=LSE, nSimulation = 1000)
 model$distance
 bootstrapSD(m=model)
 
