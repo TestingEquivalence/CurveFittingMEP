@@ -24,17 +24,52 @@ linearPoint<-function(m,f,w,x){
   return(y)
 }
 
-linearBoundaryPoint<-function(m,f,dx,eps){
+linearBoundaryPoint<-function(m,f,dx,eps,minW,maxW){
   
   aim<-function(w){
-    #print(a)
-    lc=a*interiorPoint+(1-a)*exteriorPoint
-    nmdr=updateMinDistanceModel(lc,mdr)
-    return(nmdr$min.distance-eps)
+    wf<-function(x){
+      linearPoint(m,f,w,x)
+    }
+    
+    dst=numericDistance(m,wf,dx)
+    return(dst-eps)
   }
   
-  a=uniroot(aim, c(0,1))$root
-  lc=a*interiorPoint+(1-a)*exteriorPoint
-  nmdr=updateMinDistanceModel(lc,mdr)
-  return(lc)
+  w=uniroot(aim, c(minW,maxW))$root
+  return(w)
+}
+
+powerAtPoint<-function(m,f,nSim, xSampler,errSampler){
+  res=rep(0,nSim)
+  dfs=list()
+  
+  #generate new data
+  set.seed(10071977)
+  for (i in c(1:(nSim+100))){
+    n=nrow(m$data)
+    x=xSampler(m, n)
+    y= f(x)
+    err=errSampler(m, n)
+    y=y+err
+    dfs[[i]]=data.frame(x=x, y=y )
+  }
+  
+  j=1
+  i=1
+  while(i<=nSim){
+    tryCatch({
+      m$data=dfs[[j]]
+      nm=updateModel(m)
+      nm=updateTests(nm)
+      res[i]=nm$min.epsilon
+      print(i)
+      i=i+1
+      j=j+1
+    }, error = function(e){
+      j<<-j+1
+      print("error")
+      print(j)
+    })
+  }
+  return(res)
 }
