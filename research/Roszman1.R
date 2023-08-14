@@ -42,6 +42,6 @@ res=bootstrapCoef(m,1000)
 write.csv(res,"bst_coef_MDE.csv")
 
 # power at the model LSE only
-m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LSE, nSimulation = 200)
+m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = LSE, nSimulation = 50, nSimPercentileTBootstrap = 200)
 pow=powerAtModel(m,nSim=1000, xSamplerBootstrap, errSamplerBootstrap)
-write.csv(pow,"pow.csv")
+write.csv(pow,"pow_tPB_200_50.csv")

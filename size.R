@@ -32,9 +32,14 @@ bootstrapCoef<-function(m,nSim){
   return(res)
 }
 
-powerAtModel<-function(m,nSim, xSampler,errSampler){
+powerAtModel<-function(m,nSim, xSampler,errSampler,orderName="temp"){
   res=rep(0,nSim)
   dfs=list()
+  #prepare
+  if(!dir.exists(orderName)){
+    dir.create(orderName)
+  }
+  
   
   #generate new data
   set.seed(10071977)
@@ -47,23 +52,41 @@ powerAtModel<-function(m,nSim, xSampler,errSampler){
     dfs[[i]]=data.frame(x=x, y=y )
   }
   
+  #perform tests
   j=1
   i=1
   while(i<=nSim){
-    tryCatch({
-      m$data=dfs[[j]]
-      nm=updateModel(m)
-      nm=updateTests(nm)
-      res[i]=nm$min.epsilon
+    fname=paste0("r",i,".csv")
+    fname=file.path(orderName,fname)
+    
+    if (file.exists(fname)){
+      s=read.csv(fname)
+      res[i]=s$x
       print(i)
       i=i+1
       j=j+1
-    }, error = function(e){
-      j<<-j+1
-      print("error")
-      print(j)
-    })
+      
+    }
+    else{
+      
+      tryCatch({
+        m$data=dfs[[j]]
+        nm=updateModel(m)
+        nm=updateTests(nm)
+        res[i]=nm$min.epsilon
+        print(i)
+        i=i+1
+        j=j+1
+        write.csv(res[i],fname)
+      }, error = function(e){
+        j<<-j+1
+        print("error")
+        print(j)
+      })
+    }
   }
+   
+  unlink(orderName,recursive = TRUE)
   return(res)
 }
 
