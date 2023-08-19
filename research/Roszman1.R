@@ -2,6 +2,7 @@ library(NISTnls)
 source("distance.R")
 source("curveFittingMEP.R")
 source("size.R")
+source("power.R")
 
 data=Roszman1
 data=data[order(data$x),]
@@ -43,5 +44,32 @@ write.csv(res,"bst_coef_MDE.csv")
 
 # power at the model LSE only
 m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = LSE, nSimulation = 50, nSimPercentileTBootstrap = 200)
-pow=powerAtModel(m,nSim=1000, xSamplerBootstrap, errSamplerBootstrap)
+pow=powerAtModel(m,nSim=1000, xSamplerBootstrap, errSamplerNormal)
 write.csv(pow,"pow_tPB_200_50.csv")
+
+# power at the boundary points based on sin(omega*x)
+
+fsin<-function(x){
+  omega=1/2
+  res=sin(2*pi*omega*(x-ab[1])/(ab[2]-ab[1]))
+  return(res)
+}
+
+eps=8e-8
+dx=1
+
+m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LSE, nSimulation = 200)
+w=linearBoundaryPoint(m,fsin,dx,eps,0.93,0.999)
+
+f<-function(x){
+  linearPoint(m,fsin,w,x)
+} 
+
+# x=seq(ab[1], ab[2], dx)
+# y=f(x)
+# plot(x,y)
+
+numericDistance(m,f,dx)
+
+pow=powerAtPoint(m,f,nSim=1000, xSamplerUniform,errSamplerNormal,eps)
+write.csv(pow,"pow_ATBV.csv")

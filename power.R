@@ -39,7 +39,7 @@ linearBoundaryPoint<-function(m,f,dx,eps,minW,maxW){
   return(w)
 }
 
-powerAtPoint<-function(m,f,nSim, xSampler,errSampler){
+powerAtPoint<-function(m,f,nSim, xSampler,errSampler,eps){
   res=rep(0,nSim)
   dfs=list()
   
@@ -71,5 +71,5 @@ powerAtPoint<-function(m,f,nSim, xSampler,errSampler){
       print(j)
     })
   }
-  return(res)
+  return(sum(res<=eps)/nSim)
 }
