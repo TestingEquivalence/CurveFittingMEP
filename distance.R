@@ -21,7 +21,7 @@ distance<-function(df,ab){
   
   ls=list()
   ls$v=v
-  ls$dst=dst/(n*n*(ab[2]-ab[1]))
+  ls$dst=dst/(n*n)
   
   return(ls)
 }

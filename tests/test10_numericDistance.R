@@ -16,13 +16,10 @@ m=curveFittingMEP(frm,data,none, ab, start, method=LSE)
 
 
 f<-function(x){
-  predict.m(m,x)+0.0001*rnorm(length(x))
+  predict.m(m,x)+0.1*rnorm(length(x))
 }
 
 
-f<-function(x){
-  omega=1
-  sin(2*pi*omega*(x-ab[1])/(ab[2]-ab[1]))
-}
+
 
 numericDistance(m,f,10)
