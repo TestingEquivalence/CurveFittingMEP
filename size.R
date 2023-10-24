@@ -56,12 +56,11 @@ powerAtModel<-function(m,nSim, xSampler,errSampler,orderName="temp"){
   j=1
   i=1
   while(i<=nSim){
-    fname=paste0("r",i,".csv")
+    fname=paste0("r",i,".rds")
     fname=file.path(orderName,fname)
     
     if (file.exists(fname)){
-      s=read.csv(fname)
-      res[i]=s$x
+      res[i]=readRDS(fname)
       print(i)
       i=i+1
       j=j+1
@@ -77,7 +76,7 @@ powerAtModel<-function(m,nSim, xSampler,errSampler,orderName="temp"){
         print(i)
         i=i+1
         j=j+1
-        write.csv(res[i],fname)
+        saveRDS(res[i],fname)
       }, error = function(e){
         j<<-j+1
         print("error")

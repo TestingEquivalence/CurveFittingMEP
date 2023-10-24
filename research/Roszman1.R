@@ -12,7 +12,7 @@ ab=c(-4869,-464)
 
 
 # fitting model and test
-method=LSE
+method=MDE
 m=curveFittingMEP(frm,data,none, ab, start, method)
 m$distance
 write.csv(m$coef,"coef.csv")
@@ -41,11 +41,11 @@ m=curveFittingMEP(frm,data,none, ab, start, method = MDE)
 set.seed(10071977)
 res=bootstrapCoef(m,1000)
 write.csv(res,"bst_coef_MDE.csv")
-
+ 
 # power at the model LSE only
-m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = LSE, nSimulation = 50, nSimPercentileTBootstrap = 200)
-pow=powerAtModel(m,nSim=1000, xSamplerSmoothBootstrap, errSamplerNormal)
-write.csv(pow,"pow_tPB_200_50.csv")
+m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = LSE, nSimulation = 100, nSimPercentileTBootstrap = 200)
+pow=powerAtModel(m,nSim=1000, xSamplerBootstrap, errSamplerBootstrap)
+write.csv(pow,"pow_PTBT_100_200.csv")
 
 # power at the boundary points based on sin(omega*x)
 
