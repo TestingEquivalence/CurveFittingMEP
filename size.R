@@ -73,10 +73,10 @@ powerAtModel<-function(m,nSim, xSampler,errSampler,orderName="temp"){
         nm=updateModel(m)
         nm=updateTests(nm)
         res[i]=nm$min.epsilon
+        saveRDS(res[i],fname)
         print(i)
         i=i+1
         j=j+1
-        saveRDS(res[i],fname)
       }, error = function(e){
         j<<-j+1
         print("error")
