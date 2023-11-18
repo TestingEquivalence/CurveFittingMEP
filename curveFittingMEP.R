@@ -75,7 +75,7 @@ updateModelLSE<-function(m){
 
 updateModelMDE<-function(m){
  
-  model.nls=nls(m$frm,m$data, m$start, nls.control(maxiter = 1000))
+  model.nls=nls(m$frm,m$data, m$start, nls.control(maxiter = 1000) )
   rhs.frm=rhs(m$frm)
   cf=coef(model.nls)
   

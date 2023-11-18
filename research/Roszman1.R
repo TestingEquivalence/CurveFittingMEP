@@ -43,28 +43,29 @@ res=bootstrapCoef(m,1000)
 write.csv(res,"bst_coef_MDE.csv")
  
 # power at the model LSE only
-m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = LSE, nSimulation = 100, nSimPercentileTBootstrap = 200)
-pow=powerAtModel(m,nSim=1000, xSamplerBootstrap, errSamplerBootstrap)
-write.csv(pow,"pow_PTBT_100_200.csv")
+m=curveFittingMEP(frm,data,tPercentileBootstrap, ab, start, method = LSE, nSimulation = 50, nSimPercentileTBootstrap = 500)
+pow=powerAtModel(m,nSim=1000, xSamplerUniform, errSamplerNormal)
+write.csv(pow,"pow_PTBT_50_500.csv")
 
 # power at the boundary points based on sin(omega*x)
+omega=1/4
 
 fsin<-function(x){
-  omega=1/2
   res=sin(2*pi*omega*(x-ab[1])/(ab[2]-ab[1]))
   return(res)
 }
 
-eps=8e-8
-dx=1
+eps=5E-04
+dx=(ab[2]-ab[1])/1000
 
 m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LSE, nSimulation = 200)
-w=linearBoundaryPoint(m,fsin,dx,eps,0.93,0.999)
+w=linearBoundaryPoint(m,fsin,dx,eps,0.7,0.93)
 
 f<-function(x){
   linearPoint(m,fsin,w,x)
 } 
 
+df=list()
 # x=seq(ab[1], ab[2], dx)
 # y=f(x)
 # plot(x,y)

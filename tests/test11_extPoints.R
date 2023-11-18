@@ -1,4 +1,5 @@
 library(NISTnls)
+library(ggplot2)
 source("distance.R")
 source("curveFittingMEP.R")
 source("size.R")
