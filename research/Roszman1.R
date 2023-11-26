@@ -48,7 +48,7 @@ pow=powerAtModel(m,nSim=1000, xSamplerUniform, errSamplerNormal)
 write.csv(pow,"pow_PTBT_50_500.csv")
 
 # power at the boundary points based on sin(omega*x)
-omega=1/4
+omega=1
 
 fsin<-function(x){
   res=sin(2*pi*omega*(x-ab[1])/(ab[2]-ab[1]))
@@ -59,18 +59,14 @@ eps=5E-04
 dx=(ab[2]-ab[1])/1000
 
 m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LSE, nSimulation = 200)
-w=linearBoundaryPoint(m,fsin,dx,eps,0.7,0.93)
+w=linearBoundaryPoint(m,fsin,dx,eps,0.96,0.99)
 
 f<-function(x){
   linearPoint(m,fsin,w,x)
 } 
 
-df=list()
-# x=seq(ab[1], ab[2], dx)
-# y=f(x)
-# plot(x,y)
-
 numericDistance(m,f,dx)
 
-pow=powerAtPoint(m,f,nSim=1000, xSamplerUniform,errSamplerNormal,eps)
+pow=powerAtPoint(m,f,nSim=1000, xSamplerFix,errSamplerBootstrap,eps)
+pow
 write.csv(pow,"pow_ATBV.csv")

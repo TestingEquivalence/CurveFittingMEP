@@ -31,7 +31,6 @@ linearBoundaryPoint<-function(m,f,dx,eps,minW,maxW){
       linearPoint(m,f,w,x)
     }
     
-    dst=numericDistance(m,wf,dx)
     return(dst-eps)
   }
   
@@ -45,7 +44,7 @@ powerAtPoint<-function(m,f,nSim, xSampler,errSampler,eps){
   
   #generate new data
   set.seed(10071977)
-  for (i in c(1:(nSim+100))){
+  for (i in c(1:(2*nSim))){
     n=nrow(m$data)
     x=xSampler(m, n)
     y= f(x)
