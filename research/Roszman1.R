@@ -67,6 +67,6 @@ f<-function(x){
 
 numericDistance(m,f,dx)
 
-pow=powerAtPoint(m,f,nSim=1000, xSamplerFix,errSamplerBootstrap,eps)
+pow=powerAtPoint(m,f,nSim=1000, xSamplerFix,errSamplerNormal,eps)
 pow
 write.csv(pow,"pow_ATBV.csv")

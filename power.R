@@ -31,6 +31,7 @@ linearBoundaryPoint<-function(m,f,dx,eps,minW,maxW){
       linearPoint(m,f,w,x)
     }
     
+    dst=numericDistance(m,wf,dx)
     return(dst-eps)
   }
   
