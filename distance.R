@@ -19,10 +19,7 @@ distance<-function(df,ab){
     v[i]=(sf-sy)*sqrt(dx)
   }
   
-  ls=list()
-  ls$v=v
-  ls$dst=dst/(n*n)
-  
-  return(ls)
+  dst=dst/(n*n)
+  return(dst)
 }
 

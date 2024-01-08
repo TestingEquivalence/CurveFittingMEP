@@ -8,8 +8,8 @@ none=""
 asymptoticBV="asymptoticBootstrapVariance"
 tPercentileBootstrap="tPercentileBootstrap"
 
-MDE="MDE"
-LSE="LSE"
+LM="LM"
+NLS="NLS"
 
 curveFittingMEP<-function(frm,data, test, ab, start,  method=LSE, alpha=0.05,
                           nSimulation=200, nSimPercentileTBootstrap=0){
@@ -36,11 +36,11 @@ curveFittingMEP<-function(frm,data, test, ab, start,  method=LSE, alpha=0.05,
 }
 
 updateModel<-function(m){
-  if (m$method==LSE){
-    m=updateModelLSE(m)
+  if (m$method==NLS){
+    m=updateModelNLS(m)
   }
-  if (m$method==MDE){
-    m=updateModelMDE(m)
+  if (m$method==LM){
+    m=updateModelLM(m)
   }
   
   return(m)
@@ -57,7 +57,7 @@ updateTests<-function(m){
   return(m)
 }
 
-updateModelLSE<-function(m){
+updateModelNLS<-function(m){
   #LSE regression
   m$model <-  nls(m$frm,m$data, m$start, nls.control(maxiter = 1000))
 
@@ -67,46 +67,37 @@ updateModelLSE<-function(m){
   df$f=predict(m$model)
   df=as.data.frame(df)
   m$prediction=df$f
-  m$distance=distance(df,m$ab)$dst
+  m$distance=distance(df,m$ab)
   m$coef=coef(m$model)
   
   return(m)
 }
 
-updateModelMDE<-function(m){
- 
-  model.nls=nls(m$frm,m$data, m$start, nls.control(maxiter = 1000) )
+updateModelLM<-function(m){
   rhs.frm=rhs(m$frm)
-  cf=coef(model.nls)
-  
-  data=m$data
-  data=data[order(data$x),]
   
   fn<-function(x){
+    data=data.frame(x=m$data$x)
+    
+    #add model coefficients
     for (key in names(x)){
       data[[key]]=x[[key]]
     }
-    data$f=with(data,eval(rhs.frm))
-    dst=distance(data,ab)
-    return(dst$v)
+    v=with(data,eval(rhs.frm))
+    v=v-m$data$y
+    return(v)
   }
   
-  res=nls.lm(par=cf, fn=fn)
+  res=nls.lm(par=m$start, fn=fn)
   
   m$model=res
-  
-  for (key in names(res$par)){
-    data[[key]]=res$par[[key]]
-  }
-  m$prediction=with(data,eval(rhs.frm))
-  
-  data$f=m$prediction
-  m$distance=distance(data,m$ab)$dst
-  
+  m$prediction=fn(res$par)+m$data$y
   m$coef=res$par
   
-  
- 
+  data=data.frame(x=m$data$x)
+  data$y=m$data$y
+  data$f=m$prediction
+  m$distance=distance(data,m$ab)
   
   return(m)
 }
