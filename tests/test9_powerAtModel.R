@@ -9,7 +9,7 @@ frm=y ~ b1 - b2*x - atan(b3/(x-b4))/pi
 start=c(b1 = 0.1, b2 = -0.00001, b3 = 1000, b4 = -100)
 ab=c(-4869,-464)
 
-m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method=LSE)
+m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method=NLS)
 
 
 

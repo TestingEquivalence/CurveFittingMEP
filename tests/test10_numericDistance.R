@@ -13,7 +13,7 @@ frm=y ~ b1 - b2*x - atan(b3/(x-b4))/pi
 start=c(b1 = 0.1, b2 = -0.00001, b3 = 1000, b4 = -100)
 ab=c(-4869,-464)
 
-m=curveFittingMEP(frm,data,none, ab, start, method=LSE)
+m=curveFittingMEP(frm,data,none, ab, start, method=NLS)
 data$m=predict.m(m,data$x)
 ggplot(data, aes(x = x)) +
   geom_point(aes(y = y, color = "red"), size = 1) +
@@ -26,6 +26,7 @@ f<-function(x){
 
 
 df=list()
+dx=10
 df$x=seq(from=m$ab[1],to=m$ab[2],by=dx)
 df$y=sapply(df$x,f)
 df$m=predict.m(m,df$x)

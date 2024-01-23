@@ -10,7 +10,7 @@ start=c(b1 = 0.1, b2 = -0.00001, b3 = 1000, b4 = -100)
 ab=c(-4869,-464)
 
 n=5
-m=curveFittingMEP(frm,data,none, ab, start, method=LSE)
+m=curveFittingMEP(frm,data,none, ab, start, method=NLS)
 s=xSamplerUniform(m,n)
 s
 

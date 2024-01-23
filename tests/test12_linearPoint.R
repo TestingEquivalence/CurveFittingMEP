@@ -12,7 +12,7 @@ start=c(b1 = 0.1, b2 = -0.00001, b3 = 1000, b4 = -100)
 ab=c(-4869,-464)
 
 
-m=curveFittingMEP(frm,data,none, ab, start, method=LSE)
+m=curveFittingMEP(frm,data,none, ab, start, method=LM)
 
 omega=1/2
 f<-function(x){
@@ -28,7 +28,7 @@ df$x=x
 
 w=1
 df$m=linearPoint(m,f,w,x)
-w=0.9
+w=0.91
 df$f=linearPoint(m,f,w,x)
 
 df=as.data.frame(df)
