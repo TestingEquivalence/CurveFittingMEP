@@ -43,12 +43,18 @@ res=bootstrapCoef(m,1000)
 write.csv(res,"bst_coef_LM.csv")
  
 # power at the model LM LSE only
-m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LM, nSimulation = 200)  #, nSimPercentileTBootstrap = 500)
-pow=powerAtModel(m,nSim=1000, xSamplerBootstrap, errSamplerNormal)
-write.csv(pow,"pow_AT_200.csv")
+m=curveFittingMEP(frm,data, asymptoticBV, ab, start, method = LM, nSimulation = 200, nSimPercentileTBootstrap = 200)
+resPower=list()
+for (xKey in names(xSampler)){
+  for (errKey in names(errSampler)){
+    resPower[[paste(xKey,errKey,sep="_")]]=powerAtModel(m,nSim=2, xSampler[[xKey]], errSampler[[errKey]])  
+  }
+}
+
+write.csv(resPower,"resPower.csv")
 
 # power at the boundary points based on sin(omega*x)
-omega=1/2
+omega=20
 
 fsin<-function(x){
   res=sin(2*pi*omega*(x-ab[1])/(ab[2]-ab[1]))
@@ -59,7 +65,7 @@ eps=5E-04
 dx=(ab[2]-ab[1])/1000
 
 m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LM, nSimulation = 200)
-w=linearBoundaryPoint(m,fsin,dx,eps,0.94,0.99999)
+w=linearBoundaryPoint(m,fsin,dx,eps,0.92,0.99999)
 
 f<-function(x){
   linearPoint(m,fsin,w,x)

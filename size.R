@@ -108,6 +108,11 @@ xSamplerSmoothBootstrap<-function(m,n){
   return(s)
 }
 
+xSampler=list()
+xSampler[["xSamplerBootstrap"]]=xSamplerBootstrap
+xSampler[["xSamplerSmoothBootstrap"]]=xSamplerSmoothBootstrap
+xSampler[["xSamplerUniform"]]=xSamplerUniform
+
 errSamplerBootstrap<-function(m,n){
   err=m$data$y-m$prediction
   s=sample(err,size = n, replace=TRUE)
@@ -131,17 +136,7 @@ errSamplerNormal<-function(m,n){
   return(s)
 }
 
-#  xSamplerFix and errSamplerWildBootstrap should be used always together
-
-errSamplerWildBootstrap<-function(m,n){
-  err=m$data$y-m$prediction
-  n=length(err)
-  s=rbinom(n, size = 1, prob = 0.5)
-  s[s==0]= -1
-  s=err*s
-  return(s)
-}
-
-xSamplerFix<-function(m,n){
-  return(m$data$x)
-}
+errSampler=list()
+errSampler[["errSamplerBootstrap"]]=errSamplerBootstrap
+errSampler[["errSamplerSmoothBootstrap"]] =errSamplerSmoothBootstrap
+errSampler[["errSamplerNormal"]] = errSamplerNormal
