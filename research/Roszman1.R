@@ -60,6 +60,7 @@ vErrSampler=c()
 vPower=c()
 vDst=c()
 vW=c()
+vOm=c()
 
 for (omega in vOmega){
   fsin<-function(x){
@@ -72,19 +73,29 @@ for (omega in vOmega){
   
   m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LM, nSimulation = 200)
   w=linearBoundaryPoint(m,fsin,dx,eps,0.92,0.99999)
-  vW=c(vW,w)
+  
   
   f<-function(x){
     linearPoint(m,fsin,w,x)
   } 
   
   dst=numericDistance(m,f,dx)
-  vDst=c(vDst,dst)
   
-  pw=powerAtPoint(m,f,nSim=10, xSampler[[xKey]], errSampler[[errKey]],eps)
-  vPower=c(vPower,pw)
+  for (xKey in c("xSamplerBootstrap","xSamplerUniform")){
+    for (errKey in c("errSamplerBootstrap","errSamplerNormal")){
+      pw=powerAtPoint(m,f,nSim=10, xSampler[[xKey]], errSampler[[errKey]],eps)
+      vW=c(vW,w)
+      vPower=c(vPower,pw)
+      vXSampler=c(vXSampler,xKey)
+      vErrSampler=c(vErrSampler,errKey)
+      vOm=c(vOm, omega)
+      vDst=c(vDst,dst)
+    }
+  }
 }
 
-res=data.frame(omega=vOmega, xSampler=vXSampler, errSampler=vErrSampler,
+res=data.frame(omega=vOm, xSampler=vXSampler, errSampler=vErrSampler,
                power=vPower, distance=vDst, w=vW)
-write.csv(resPower,"resPower.csv")
+write.csv(res,"resPower_AT200_eps001.csv")
+
+
