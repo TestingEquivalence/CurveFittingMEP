@@ -44,14 +44,20 @@ write.csv(res,"bst_coef_LM.csv")
  
 # power at the model LM LSE only
 m=curveFittingMEP(frm,data, asymptoticBV, ab, start, method = LM, nSimulation = 1000, nSimPercentileTBootstrap = 200)
+m=curveFittingMEP(frm,data, asymptoticBV, ab, start, method = LM, nSimulation = 1000, nSimPercentileTBootstrap = 200)
+
 resPower=list()
-for (xKey in names(xSampler)){
-  for (errKey in names(errSampler)){
-    resPower[[paste(xKey,errKey,sep="_")]]=powerAtModel(m,nSim=1000, xSampler[[xKey]], errSampler[[errKey]])  
+xKeys=c("xSamplerBootstrap","xSamplerSmoothBootstrap","xSamplerUniform")
+errKeys=c("errSamplerBootstrap","errSamplerSmoothBootstrap","errSamplerNormal")
+for (xKey in xKeys){
+  for (errKey in errKeys){
+    orderName=paste0(xKey,"_", errKey)
+    resPower[[paste(xKey,errKey,sep="_")]]=powerAtModel(m,nSim=1000, xSampler[[xKey]], 
+                                                        errSampler[[errKey]], orderName)  
   }
 }
 
-write.csv(resPower,"resSizeATBT1000.csv")
+write.csv(resPower,"resSize_ATBT_200.csv")
 
 # power at the boundary points based on sin(omega*x)
 vOmega=c(0.5, c(1:10))
