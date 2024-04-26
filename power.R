@@ -39,9 +39,14 @@ linearBoundaryPoint<-function(m,f,dx,eps,minW,maxW){
   return(w)
 }
 
-powerAtPoint<-function(m,f,nSim, xSampler,errSampler,eps){
+powerAtPoint<-function(m,f,nSim, xSampler,errSampler,eps, orderName="temp"){
   res=rep(0,nSim)
   dfs=list()
+  
+  #prepare
+  if(!dir.exists(orderName)){
+    dir.create(orderName)
+  }
   
   #generate new data
   set.seed(10071977)
@@ -57,19 +62,34 @@ powerAtPoint<-function(m,f,nSim, xSampler,errSampler,eps){
   j=1
   i=1
   while(i<=nSim){
-    tryCatch({
-      m$data=dfs[[j]]
-      nm=updateModel(m)
-      nm=updateTests(nm)
-      res[i]=nm$min.epsilon
+    fname=paste0("r",i,".rds")
+    fname=file.path(orderName,fname)
+    
+    if (file.exists(fname)){
+      res[i]=readRDS(fname)
       print(i)
       i=i+1
       j=j+1
-    }, error = function(e){
-      j<<-j+1
-      print("error")
-      print(j)
-    })
+    }
+    else{
+      tryCatch({
+        m$data=dfs[[j]]
+        nm=updateModel(m)
+        nm=updateTests(nm)
+        res[i]=nm$min.epsilon
+        saveRDS(res[i],fname)
+        print(i)
+        i=i+1
+        j=j+1
+      }, error = function(e){
+        j<<-j+1
+        print("error")
+        print(j)
+      })
+    }
   }
+  
+  unlink(orderName,recursive = TRUE)
+  
   return(sum(res<=eps)/nSim)
 }

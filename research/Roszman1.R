@@ -43,12 +43,15 @@ res=bootstrapCoef(m,1000)
 write.csv(res,"bst_coef_LM.csv")
  
 # power at the model LM LSE only
-m=curveFittingMEP(frm,data, asymptoticBV, ab, start, method = LM, nSimulation = 1000, nSimPercentileTBootstrap = 200)
-m=curveFittingMEP(frm,data, asymptoticBV, ab, start, method = LM, nSimulation = 1000, nSimPercentileTBootstrap = 200)
+m=curveFittingMEP(frm,data, asymptoticBV, ab, start, method = LM, nSimulation = 200)
+# m=curveFittingMEP(frm,data, tPercentileBootstrap, ab, start, method = LM, nSimulation = 50, nSimPercentileTBootstrap = 200)
 
 resPower=list()
-xKeys=c("xSamplerBootstrap","xSamplerSmoothBootstrap","xSamplerUniform")
-errKeys=c("errSamplerBootstrap","errSamplerSmoothBootstrap","errSamplerNormal")
+# "xSamplerBootstrap","xSamplerSmoothBootstrap","xSamplerUniform"
+xKeys=c("xSamplerBootstrap")
+# "errSamplerBootstrap","errSamplerSmoothBootstrap","errSamplerNormal"
+errKeys=c("errSamplerBootstrap")
+
 for (xKey in xKeys){
   for (errKey in errKeys){
     orderName=paste0(xKey,"_", errKey)
@@ -60,13 +63,22 @@ for (xKey in xKeys){
 write.csv(resPower,"resSize_ATBT_200.csv")
 
 # power at the boundary points based on sin(omega*x)
-vOmega=c(0.5, c(1:10))
+vOmega=c(0.5) #, c(1:10))
 vXSampler=c()
 vErrSampler=c()
 vPower=c()
 vDst=c()
 vW=c()
 vOm=c()
+
+# "xSamplerBootstrap","xSamplerSmoothBootstrap","xSamplerUniform"
+xKeys=c("xSamplerBootstrap")
+# "errSamplerBootstrap","errSamplerSmoothBootstrap","errSamplerNormal"
+errKeys=c("errSamplerBootstrap")
+
+m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LM, nSimulation = 200)
+# m=curveFittingMEP(frm,data, tPercentileBootstrap, ab, start, method = LM, nSimulation = 50, nSimPercentileTBootstrap = 200)
+
 
 for (omega in vOmega){
   fsin<-function(x){
@@ -76,8 +88,7 @@ for (omega in vOmega){
   
   eps=0.0010
   dx=(ab[2]-ab[1])/1000
-  
-  m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LM, nSimulation = 200)
+
   w=linearBoundaryPoint(m,fsin,dx,eps,0.92,0.99999)
   
   
@@ -87,9 +98,10 @@ for (omega in vOmega){
   
   dst=numericDistance(m,f,dx)
   
-  for (xKey in c("xSamplerBootstrap","xSamplerUniform")){
-    for (errKey in c("errSamplerBootstrap","errSamplerNormal")){
-      pw=powerAtPoint(m,f,nSim=10, xSampler[[xKey]], errSampler[[errKey]],eps)
+  for (xKey in xKeys){
+    for (errKey in errKeys){
+      orderName=paste0(xKey,"_", errKey,"_",omega)
+      pw=powerAtPoint(m,f,nSim=1000, xSampler[[xKey]], errSampler[[errKey]],eps, orderName )
       vW=c(vW,w)
       vPower=c(vPower,pw)
       vXSampler=c(vXSampler,xKey)

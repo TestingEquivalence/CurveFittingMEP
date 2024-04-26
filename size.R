@@ -35,6 +35,7 @@ bootstrapCoef<-function(m,nSim){
 powerAtModel<-function(m,nSim, xSampler,errSampler,orderName="temp"){
   res=rep(0,nSim)
   dfs=list()
+  
   #prepare
   if(!dir.exists(orderName)){
     dir.create(orderName)
