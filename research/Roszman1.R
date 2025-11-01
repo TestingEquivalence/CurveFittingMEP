@@ -43,27 +43,27 @@ res=bootstrapCoef(m,1000)
 write.csv(res,"bst_coef_LM.csv")
  
 # power at the model LM LSE only
-m=curveFittingMEP(frm,data, asymptoticBV, ab, start, method = LM, nSimulation = 200)
-# m=curveFittingMEP(frm,data, tPercentileBootstrap, ab, start, method = LM, nSimulation = 50, nSimPercentileTBootstrap = 200)
+# m=curveFittingMEP(frm,data, asymptoticBV, ab, start, method = LM, nSimulation = 200)
+m=curveFittingMEP(frm,data, tPercentileBootstrap, ab, start, method = LM, nSimulation = 50, nSimPercentileTBootstrap = 500)
 
 resPower=list()
 # "xSamplerBootstrap","xSamplerSmoothBootstrap","xSamplerUniform"
 xKeys=c("xSamplerBootstrap")
 # "errSamplerBootstrap","errSamplerSmoothBootstrap","errSamplerNormal"
-errKeys=c("errSamplerBootstrap")
+errKeys=c("errSamplerBootstrap","errSamplerNormal")
 
 for (xKey in xKeys){
   for (errKey in errKeys){
     orderName=paste0(xKey,"_", errKey)
     resPower[[paste(xKey,errKey,sep="_")]]=powerAtModel(m,nSim=1000, xSampler[[xKey]], 
                                                         errSampler[[errKey]], orderName)  
+    write.csv(resPower,"resSize_ptbt_500_50.csv")
   }
 }
 
-write.csv(resPower,"resSize_ATBT_200.csv")
 
 # power at the boundary points based on sin(omega*x)
-vOmega=c(0.5) #, c(1:10))
+vOmega=c(4) #, c(1:10))
 vXSampler=c()
 vErrSampler=c()
 vPower=c()
@@ -71,13 +71,13 @@ vDst=c()
 vW=c()
 vOm=c()
 
-# "xSamplerBootstrap","xSamplerSmoothBootstrap","xSamplerUniform"
-xKeys=c("xSamplerBootstrap")
-# "errSamplerBootstrap","errSamplerSmoothBootstrap","errSamplerNormal"
-errKeys=c("errSamplerBootstrap")
+# "xSamplerBootstrap","xSamplerUniform"
+xKeys=c("xSamplerBootstrap","xSamplerUniform")
+# "errSamplerBootstrap","errSamplerNormal"
+errKeys=c("errSamplerBootstrap","errSamplerNormal")
 
-m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LM, nSimulation = 200)
-# m=curveFittingMEP(frm,data, tPercentileBootstrap, ab, start, method = LM, nSimulation = 50, nSimPercentileTBootstrap = 200)
+# m=curveFittingMEP(frm,data,asymptoticBV, ab, start, method = LM, nSimulation = 1000)
+m=curveFittingMEP(frm,data, tPercentileBootstrap, ab, start, method = LM, nSimulation = 50, nSimPercentileTBootstrap = 200)
 
 
 for (omega in vOmega){
@@ -108,12 +108,14 @@ for (omega in vOmega){
       vErrSampler=c(vErrSampler,errKey)
       vOm=c(vOm, omega)
       vDst=c(vDst,dst)
+      
+      res=data.frame(omega=vOm, xSampler=vXSampler, errSampler=vErrSampler,
+                     power=vPower, distance=vDst, w=vW)
+      write.csv(res,"resPower_tPBT_200_50_eps001.csv")
+      
     }
   }
 }
 
-res=data.frame(omega=vOm, xSampler=vXSampler, errSampler=vErrSampler,
-               power=vPower, distance=vDst, w=vW)
-write.csv(res,"resPower_AT200_eps001.csv")
 
 
